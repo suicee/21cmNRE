@@ -4,6 +4,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
+import matplotlib.patches as mpatches
+from matplotlib.ticker import StrMethodFormatter
 def gridplot(datas:list,data_names:list,true_para:list=None,para_mins:list=None,para_maxs:list=None,para_names:list=None,figsize:tuple=(10,10)):
     # plt.rcParams.update({'font.size': figsize[0]*1.5})
     # plt.rcParams["font.family"] = "Times New Roman"
@@ -24,13 +26,13 @@ def gridplot(datas:list,data_names:list,true_para:list=None,para_mins:list=None,
     plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
     plt.rc('xtick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
     plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
-    plt.rc('legend', fontsize=MEDIUM_SIZE)    # legend fontsize
+    plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
     plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
     fig=plt.figure(figsize=figsize,facecolor=(1,1,1))
     v_line_fac=1.1
     para_space_fac=0.5
-    tick_number=5
+    tick_number=6
     tick_round=2
 
     N_dim=datas[0].shape[1]
@@ -87,9 +89,9 @@ def gridplot(datas:list,data_names:list,true_para:list=None,para_mins:list=None,
                 if not (j==0):
                     plt.yticks([], [])
                 else:
-
+                    plt.gca().yaxis.set_major_formatter(StrMethodFormatter('{x:,.2f}'))
 #                     plt.yticks(np.linspace(y_min,y_max,tick_number)[1:-1])
-                    plt.yticks(np.linspace(round(y_min,tick_round-1),round(y_max,tick_round-1),tick_number)[1:-1])
+#                     plt.yticks(np.linspace(round(y_min,tick_round-1),round(y_max,tick_round-1),tick_number)[1:-1])
                     if para_names is None:
                         plt.ylabel(f"$param_{i}$")
                     else:
@@ -98,12 +100,16 @@ def gridplot(datas:list,data_names:list,true_para:list=None,para_mins:list=None,
             if not (i==N_dim-1):
                 plt.xticks([], [])
             else:
-                plt.xticks(np.linspace(round(x_min,tick_round-1),round(x_max,tick_round-1),tick_number)[1:-1])
+                if j==0:
+                    plt.xticks(np.linspace(round(x_min,tick_round-1),round(x_max,tick_round-1),tick_number)[1:-1])
+                plt.gca().xaxis.set_major_formatter(StrMethodFormatter('{x:,.2f}'))
+#                 plt.xticks(np.linspace(round(x_min,tick_round-1),round(x_max,tick_round-1),tick_number)[1:-1])
                 if para_names is None:
                     plt.xlabel(f"$param_{j}$")
                 else:
                     plt.xlabel(f"${para_names[j]}$")
-    fig.legend(handles=patches,loc=(0.83,0.88))
+    fig.legend(handles=patches,loc=(0.75,0.85))
+#     fig.legend(handles=patches)
     return fig
 
 # def gridplot(data,true_para:list=None,para_mins:list=None,para_maxs:list=None,para_names:list=None,figsize:tuple=(10,10)):
